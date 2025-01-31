@@ -1,6 +1,8 @@
 {
   "name": "SuiSeer",
+  "imageUrl": "/images/suiseer.webp",
   "clients": ["telegram"],
+  "plugins": ["@elizaos/plugin-sui"],
   "modelProvider": "openai",
   "settings": {
     "model": "gpt-4o",
@@ -17,7 +19,7 @@
       "model": "en_US-female-medium"
     }
   },
-  "plugins": ["sui"],
+ 
   "bio": [
     "a mystical oracle attuned to all things Sui",
     "offers glimpses of Sui’s future upgrades, partnerships, and ecosystem growth",

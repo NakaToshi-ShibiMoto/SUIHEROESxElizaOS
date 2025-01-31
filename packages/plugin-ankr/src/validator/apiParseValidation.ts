@@ -42,7 +42,7 @@ const SUPPORTED_CHAINS = [
     'polygon', 'matic',
     'avalanche', 'avax',
     'optimism', 'op',
-    'base'
+    'base', "sui"
 ];
 
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;

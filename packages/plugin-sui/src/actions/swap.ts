@@ -6,7 +6,6 @@ import {
     Memory,
     ModelClass,
     ServiceType,
-    // ServiceType,
     State,
     composeContext,
     elizaLogger,
@@ -15,6 +14,8 @@ import {
 } from "@elizaos/core";
 import { SuiService } from "../services/sui";
 import { z } from "zod";
+import { tokens } from "../tokens";
+import { getAmount } from "../tokens";  // Ensure the path is correct
 
 export interface SwapPayload extends Content {
     from_token: string;
@@ -27,8 +28,7 @@ function isSwapContent(content: Content): content is SwapPayload {
     return (
         typeof content.from_token === "string" &&
         typeof content.destination_token === "string" &&
-        (typeof content.amount === "string" ||
-            typeof content.amount === "number")
+        (typeof content.amount === "string" || typeof content.amount === "number")
     );
 }
 
@@ -50,7 +50,6 @@ Given the recent messages, extract the following information about the requested
 - Destination token you want to swap to
 - Source Token Amount to swap
 
-
 Respond with a JSON markdown block containing only the extracted values.`;
 
 export default {
@@ -70,9 +69,7 @@ export default {
     ): Promise<boolean> => {
         elizaLogger.log("Starting SWAP_TOKEN handler...");
 
-        const service = runtime.getService<SuiService>(
-            ServiceType.TRANSCRIPTION
-        );
+        const service = runtime.getService<SuiService>(ServiceType.TRANSCRIPTION);
 
         if (!state) {
             // Initialize or update state
@@ -106,7 +103,7 @@ export default {
         const swapContent = content.object as SwapPayload;
         elizaLogger.info("Swap content:", swapContent);
 
-        if (service.getNetwork() == "mainnet") {
+        if (service.getNetwork() === "mainnet") {
             // Validate transfer content
             if (!isSwapContent(swapContent)) {
                 console.error("Invalid content for SWAP_TOKEN action.");
@@ -119,76 +116,58 @@ export default {
                 return false;
             }
 
-            const destinationToken = await service.getTokenMetadata(
-                swapContent.destination_token
+            // Validate and retrieve token metadata
+            const destinationToken = await service.getTokenMetadata(swapContent.destination_token);
+            const fromToken = await service.getTokenMetadata(swapContent.from_token);
+
+            if (!destinationToken || !fromToken) {
+                callback?.({
+                    text: `Error: Invalid tokens selected for swap. Ensure both ${swapContent.from_token} and ${swapContent.destination_token} are supported.`,
+                    content: { error: "Invalid token selection" },
+                });
+                return false;
+            }
+
+            // Ensure both tokens are supported in the system
+            if (!tokens.has(fromToken.symbol) || !tokens.has(destinationToken.symbol)) {
+                callback?.({
+                    text: `Error: One or both of the tokens (${swapContent.from_token} → ${swapContent.destination_token}) are not supported.`,
+                    content: { error: "Unsupported token pair" },
+                });
+                return false;
+            }
+
+            // Convert amount to a valid BigInt for SUI transaction
+            const swapAmountFixed = getAmount(Number(swapContent.amount), fromToken);
+            elizaLogger.info("Swap amount:", swapAmountFixed);
+
+            console.log(`Swapping ${swapContent.amount} ${fromToken.symbol} → ${destinationToken.symbol} (Raw: ${swapAmountFixed})`);
+
+
+            // Execute the swap transaction
+            const result = await service.swapToken(
+                fromToken.symbol,
+                swapAmountFixed.toString(), // Ensure valid BigInt string
+                0,
+                destinationToken.symbol
             );
 
-            elizaLogger.log("Destination token:", destinationToken);
+            if (result.success) {
+                const humanReadableAmount = Number(swapContent.amount);
 
-            const fromToken = await service.getTokenMetadata(
-                swapContent.from_token
-            );
-
-            elizaLogger.log("From token:", fromToken);
-
-            // one action only can call one callback to save new message.
-            // runtime.processActions
-            if (destinationToken && fromToken) {
-                try {
-                    const swapAmount = service.getAmount(
-                        swapContent.amount,
-                        fromToken
-                    );
-
-                    elizaLogger.info("Swap amount:", swapAmount);
-
-                    elizaLogger.info(
-                        "Destination token address:",
-                        destinationToken.tokenAddress
-                    );
-
-                    elizaLogger.info(
-                        "From token address:",
-                        fromToken.tokenAddress
-                    );
-
-                    elizaLogger.info("Swap amount:", swapAmount);
-
-                    const result = await service.swapToken(
-                        fromToken.symbol,
-                        swapAmount.toString(),
-                        0,
-                        destinationToken.symbol
-                    );
-
-                    if (result.success) {
-                        callback({
-                            text: `Successfully swapped ${swapContent.amount} ${swapContent.from_token} to  ${swapContent.destination_token}, Transaction: ${service.getTransactionLink(
-                                result.tx
-                            )}`,
-                            content: swapContent,
-                        });
-                    }
-                } catch (error) {
-                    elizaLogger.error("Error swapping token:", error);
-                    callback({
-                        text: `Failed to swap ${error}, swapContent : ${JSON.stringify(
-                            swapContent
-                        )}`,
-                        content: { error: "Failed to swap token" },
-                    });
-                }
+callback?.({
+    text: `Successfully swapped ${humanReadableAmount} ${fromToken.symbol} for ${destinationToken.symbol}, Transaction: ${service.getTransactionLink(result.tx)}`,
+    content: swapContent,
+});
             } else {
-                callback({
-                    text: `destination token: ${swapContent.destination_token} or from token: ${swapContent.from_token} not found`,
-                    content: { error: "Destination token not found" },
+                callback?.({
+                    text: `Swap failed for ${fromToken.symbol} → ${destinationToken.symbol}. Try again later.`,
+                    content: { error: "Swap execution failed" },
                 });
             }
         } else {
-            callback({
-                text:
-                    "Sorry, I can only swap on the mainnet, parsed params : " +
-                    JSON.stringify(swapContent, null, 2),
+            callback?.({
+                text: "Sorry, I can only swap on the mainnet. Parsed parameters: " + JSON.stringify(swapContent, null, 2),
                 content: { error: "Unsupported network" },
             });
             return false;
@@ -229,14 +208,14 @@ export default {
             {
                 user: "{{user2}}",
                 content: {
-                    text: "I'll help you swap 1 SUI to USDC now...",
+                    text: "I'll help you swap 1 USDC to SUI now...",
                     action: "SWAP_TOKEN",
                 },
             },
             {
                 user: "{{user2}}",
                 content: {
-                    text: "Successfully swapped 1 SUI to USDC, Transaction: 0x39a8c432d9bdad993a33cc1faf2e9b58fb7dd940c0425f1d6db3997e4b4b05c0",
+                    text: "Successfully swapped 1 USDC to SUI, Transaction: 0x39a8c432d9bdad993a33cc1faf2e9b58fb7dd940c0425f1d6db3997e4b4b05c0",
                 },
             },
         ],

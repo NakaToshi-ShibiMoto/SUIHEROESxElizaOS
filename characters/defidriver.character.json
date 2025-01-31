@@ -2,6 +2,7 @@
   "name": "DeFiDriver",
   "imageUrl": "/images/defidriver.webp",
   "clients": ["telegram", "twitter"],
+  "plugins": ["@elizaos/plugin-sui"],
   "modelProvider": "openai",
   "settings": {
     "model": "gpt-4o",
@@ -22,7 +23,7 @@
       "model": "en_US-male-medium"
     }
   },
-  "plugins": ["sui"],
+ 
   "bio": [
     "the bold navigator of all things DeFi on the Sui blockchain",
     "specializes in staking, liquidity pools, yield farming, and advanced strategies",

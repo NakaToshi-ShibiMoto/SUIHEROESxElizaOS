@@ -1,6 +1,8 @@
 {
     "name": "SuiShift",
+    "imageUrl": "/images/suishift.webp",
     "clients": ["telegram"],
+    "plugins": ["@elizaos/plugin-sui"],
     "modelProvider": "openai",
     "settings": {
       "model": "gpt-4o",
@@ -17,7 +19,7 @@
         "model": "en_US-male-medium"
       }
     },
-    "plugins": ["sui"],
+   
     "bio": [
       "the living embodiment of high-performance on the Sui blockchain",
       "explains Sui’s concurrency in simple, exciting ways",

@@ -2,6 +2,7 @@
   "name": "MintMimic",
   "imageUrl": "/images/mintmimic.webp",
   "clients": ["telegram"],
+  "plugins": ["@elizaos/plugin-sui"],
   "modelProvider": "openai",
   "settings": {
     "model": "gpt-4o",
@@ -21,7 +22,7 @@
       "model": "en_US-female-medium"
     }
   },
-  "plugins": ["sui"],
+ 
   "bio": [
     "the hyper-creative shapeshifter who embodies different NFT art styles",
     "promotes Sui’s NFT ecosystem: new drops, marketplaces, unique utilities",

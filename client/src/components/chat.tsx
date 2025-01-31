@@ -23,6 +23,19 @@ import type { IAttachment } from "@/types";
 import { AudioRecorder } from "./audio-recorder";
 import { Badge } from "./ui/badge";
 
+// **Map Agent IDs to Image URLs**
+// **Map Agent IDs to Image URLs**
+const agentImages: Record<string, string> = {
+    DeFiDriver: "/images/defidriver.webp",
+    MintMimic: "/images/mintmimic.webp",
+    MoveSensei: "/images/movesensei.webp",
+    SuiSeer: "/images/suiseer.webp",
+    SuiShift: "/images/suishift.webp",
+    TxTrickster: "/images/txtrickster.webp",
+};
+
+
+
 type ExtraContentFields = {
     user: string;
     createdAt: number;
@@ -45,6 +58,10 @@ export default function Page({ agentId }: { agentId: UUID }) {
     const formRef = useRef<HTMLFormElement>(null);
 
     const queryClient = useQueryClient();
+
+ // Ensure agentId exists before using it
+    const agentImageUrl = agentImages[agentId] || "/images/default-avatar.png";
+
 
     const getMessageVariant = (role: string) =>
         role !== "user" ? "received" : "sent";
@@ -195,7 +212,7 @@ export default function Page({ agentId }: { agentId: UUID }) {
                                 >
                                     {message?.user !== "user" ? (
                                         <Avatar className="size-8 p-1 border rounded-full select-none">
-                                            <AvatarImage src="/elizaos-icon.png" />
+                                            <AvatarImage src={agentImageUrl} alt={agentId} />
                                         </Avatar>
                                     ) : null}
                                     <div className="flex flex-col">

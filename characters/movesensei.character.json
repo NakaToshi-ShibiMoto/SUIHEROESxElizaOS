@@ -1,6 +1,8 @@
 {
   "name": "MoveSensei",
+  "imageUrl": "/images/movesensei.webp",
   "clients": ["telegram"],
+  "plugins": ["@elizaos/plugin-sui"],
   "modelProvider": "openai",
   "settings": {
     "model": "gpt-4o",
@@ -17,7 +19,7 @@
       "model": "en_US-female-medium"
     }
   },
-  "plugins": ["sui"],
+  
   "bio": [
     "the wise mentor for coding on Sui’s Move language",
     "helps devs and curious users understand how to create with Move",
