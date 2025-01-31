@@ -14,6 +14,15 @@ import { NavLink } from "react-router";
 import type { UUID } from "@elizaos/core";
 import { formatAgentName } from "@/lib/utils";
 
+const agentImages: Record<string, string> = {
+    "MintMimic": "/images/mintmimic.webp",
+    "DeFiDriver": "/images/defidriver.webp",
+    "SuiShift": "/images/suishift.webp",
+    "MoveSensei": "/images/movesensei.webp",
+    "TxTrickster": "/images/txtrickster.webp",
+    "SuiSeer": "/images/suiseer.webp"
+};
+
 export default function Home() {
     const query = useQuery({
         queryKey: ["agents"],
@@ -34,9 +43,17 @@ export default function Home() {
                         </CardHeader>
                         <CardContent>
                             <div className="rounded-md bg-muted aspect-square w-full grid place-items-center">
-                                <div className="text-6xl font-bold uppercase">
-                                    {formatAgentName(agent?.name)}
-                                </div>
+                                {agentImages[agent.name] ? (
+                                    <img
+                                        src={agentImages[agent.name]}
+                                        alt={agent.name}
+                                        className="w-full h-full object-cover rounded-md"
+                                    />
+                                ) : (
+                                    <div className="text-6xl font-bold uppercase">
+                                        {formatAgentName(agent?.name)}
+                                    </div>
+                                )}
                             </div>
                         </CardContent>
                         <CardFooter>

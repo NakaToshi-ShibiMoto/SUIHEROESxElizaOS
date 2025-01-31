@@ -139,7 +139,7 @@
         "@elizaos/plugin-imgflip": "workspace:*",
         "@elizaos/plugin-ethstorage": "workspace:*",
         "@elizaos/plugin-mina": "workspace:*",
-        "@elizaos/plugin-email-automation": "workspace:*",
+       
         "@elizaos/plugin-dcap": "workspace:*",
         "@elizaos/plugin-form": "workspace:*",
         "@elizaos/plugin-ankr": "workspace:*",

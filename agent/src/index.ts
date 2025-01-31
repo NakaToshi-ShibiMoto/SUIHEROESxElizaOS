@@ -144,7 +144,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import yargs from "yargs";
 import { emailPlugin } from "@elizaos/plugin-email";
-import { emailAutomationPlugin } from "@elizaos/plugin-email-automation";
+
 import { seiPlugin } from "@elizaos/plugin-sei";
 import { sunoPlugin } from "@elizaos/plugin-suno";
 import { udioPlugin } from "@elizaos/plugin-udio";
