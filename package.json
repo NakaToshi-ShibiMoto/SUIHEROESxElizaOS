@@ -22,7 +22,6 @@
     "docker": "pnpm docker:build && pnpm docker:run && pnpm docker:bash",
     "test": "bash ./scripts/test.sh",
     "smokeTests": "bash ./scripts/smokeTests.sh",
-    "integrationTests": "bash ./scripts/integrationTests.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -59,9 +58,6 @@
       "cookie": "0.7.0",
       "bs58": "5.0.0",
       "@coral-xyz/anchor": "0.28.0"
-    },
-    "patchedDependencies": {
-      "@solana-developers/helpers": "patches/@solana-developers__helpers.patch"
     }
   },
   "engines": {
