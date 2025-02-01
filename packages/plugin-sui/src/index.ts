@@ -9,7 +9,7 @@ export { WalletProvider, transferToken as TransferSuiToken };
 export const suiPlugin: Plugin = {
     name: "sui",
     description: "Sui Plugin for Eliza",
-    actions: [transferToken, swapToken],
+    actions: [transferToken, swapToken,],
     evaluators: [],
     providers: [walletProvider],
     services: [new SuiService()],

@@ -52,5 +52,5 @@ export const getAmount = (amount: string | number, meta: TokenMetadata) => {
     if (isNaN(v) || v <= 0) {
         throw new Error(`Invalid amount: ${amount} for token ${meta.symbol}`);
     }
-    return BigInt(Math.floor(v * 10 ** meta.decimals)); // Ensure whole number
+    return BigInt(Math.floor(v * 10 ** meta.decimals)); // Convert to raw blockchain units
 };
