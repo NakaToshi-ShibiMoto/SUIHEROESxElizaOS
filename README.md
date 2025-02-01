@@ -1,3 +1,6 @@
+
+ "characters": "pnpm start --characters=characters/defidriver.character.json, characters/mintmimic.character.json, characters/movesensei.character.json, characters/suiseer.character.json, characters/suiswift.character.json, characters/txtrickster.character.json"
+
 # Eliza 🤖
 
 <div align="center">
