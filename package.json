@@ -23,7 +23,7 @@
     "test": "bash ./scripts/test.sh",
     "smokeTests": "bash ./scripts/smokeTests.sh",
     "integrationTests": "bash ./scripts/integrationTests.sh",
-   "characters": "pnpm start --'characters=characters/defidriver.character.json, characters/mintmimic.character.json, characters/movesensei.character.json, characters/suiseer.character.json, characters/suiswift.character.json, characters/txtrickster.character.json'"
+    "characters": "pnpm start --'characters=characters/defidriver.character.json, characters/mintmimic.character.json, characters/movesensei.character.json, characters/suiseer.character.json, characters/suiswift.character.json, characters/txtrickster.character.json'"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
